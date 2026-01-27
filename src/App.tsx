@@ -86,11 +86,6 @@ function App() {
 									d.data.imageUrl
 									// @ts-ignore
 									}" style="margin-top:-30px;margin-left:${d.width / 2 - 30}px;border-radius:100px;width:60px;height:60px;" />
-
-								<div style="margin-right:10px;margin-top:15px;float:right">${
-									// @ts-ignore
-									d.data.id
-								}</div>
 								
 								<div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${
 									// @ts-ignore
@@ -106,16 +101,6 @@ function App() {
 										// @ts-ignore
 										d.data.positionName
 									} </div>
-								</div> 
-								<div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
-									<div > Manages:  ${
-										// @ts-ignore
-										d.data._directSubordinates
-									} 👤</div>  
-									<div > Oversees: ${
-										// @ts-ignore
-										d.data._totalSubordinates
-									} 👤</div>    
 								</div>
 								</div>     
 						</div>
