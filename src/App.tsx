@@ -1,8 +1,33 @@
-import { useEffect, useEffectEvent, useRef, useState, useTransition } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef, useState, useTransition } from 'react'
+import { tree, walkMap } from './data'
 import './App.css'
 
 import { OrgChart } from 'd3-org-chart'
 import * as d3 from 'd3'
+
+function useTjData(){
+	const data = useMemo(() => {
+		const data: unknown[] = []
+		walkMap(tree, node => {
+			data.push({
+				id: node.key,
+				name: node.title,
+				positionName: "",
+				parentId: node.parent??"",
+				imageUrl: "",
+				area: "",
+				// @ts-ignore
+				level: node.data.level??""
+			})
+			return node
+		})
+
+		// @ts-ignore
+		return data.sort((a, b) => a.level - b.level)
+	}, [])
+
+	return [ data, false ] as const
+}
 
 function useCsvData<D=unknown, E=unknown>(url: string) {
 	const [ data, setData ] = useState<D>()
@@ -28,16 +53,17 @@ function useCsvData<D=unknown, E=unknown>(url: string) {
 function App() {
 	const ref = useRef<HTMLDivElement>(null)
 	
-	const [ data, isLoading ] = useCsvData('https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv')
+	const [ data, isLoading ] = useTjData()
+	// const [ data, isLoading ] = useCsvData('https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv')
 
 	useEffect(() => console.log({ data }), [ data ])
 
 	useEffect(() => {
 		if(!isLoading){
 			const chart = new OrgChart()
-				// @ts-expect-error Annotation throuble
+				// @ts-ignore
 				.container(ref.current)
-				// @ts-expect-error Annotation throuble
+				// @ts-ignore
 				.data(data)
 				.nodeWidth((d) => 250)
 				.initialZoom(0.7)
