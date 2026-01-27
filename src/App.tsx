@@ -1,33 +1,123 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useEffectEvent, useRef, useState, useTransition } from 'react'
 import './App.css'
 
+import { OrgChart } from 'd3-org-chart'
+import * as d3 from 'd3'
+
+function useCsvData<D=unknown, E=unknown>(url: string) {
+	const [ data, setData ] = useState<D>()
+	const [ error, setError ] = useState<D>()
+	const [ isLoading, startTransition ] = useTransition()
+
+	useEffect(() => {
+		startTransition(async () => {
+			try {
+				// @ts-expect-error Annotation throuble
+				setData(await d3.csv(url))
+			}
+			catch(e){
+				// @ts-expect-error Annotation throuble
+				setError(e)
+			}
+		})
+	}, [])
+
+	return [ data, isLoading, error ] as const
+}
+
 function App() {
-	const [count, setCount] = useState(0)
+	const ref = useRef<HTMLDivElement>(null)
+	
+	const [ data, isLoading ] = useCsvData('https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv')
+
+	useEffect(() => console.log({ data }), [ data ])
+
+	useEffect(() => {
+		if(!isLoading){
+			const chart = new OrgChart()
+				// @ts-expect-error Annotation throuble
+				.container(ref.current)
+				// @ts-expect-error Annotation throuble
+				.data(data)
+				.nodeWidth((d) => 250)
+				.initialZoom(0.7)
+				.nodeHeight((d) => 175)
+				.childrenMargin((d) => 40)
+				.compactMarginBetween((d) => 15)
+				.compactMarginPair((d) => 80)
+				.nodeContent(
+					function(d, i, arr, state) {
+						return `
+						<div style="padding-top:30px;background-color:none;margin-left:1px;height:${
+								d.height
+								}px;border-radius:2px;overflow:visible">
+								<div style="height:${
+									d.height - 32
+								}px;padding-top:0px;background-color:white;border:1px solid lightgray;">
+
+									<img src=" ${
+										// @ts-ignore
+									d.data.imageUrl
+									// @ts-ignore
+									}" style="margin-top:-30px;margin-left:${d.width / 2 - 30}px;border-radius:100px;width:60px;height:60px;" />
+
+								<div style="margin-right:10px;margin-top:15px;float:right">${
+									// @ts-ignore
+									d.data.id
+								}</div>
+								
+								<div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${
+									// @ts-ignore
+									d.width - 2
+								}px;border-radius:1px"></div>
+
+								<div style="padding:20px; padding-top:35px;text-align:center">
+									<div style="color:#111672;font-size:16px;font-weight:bold"> ${
+										// @ts-ignore
+										d.data.name
+									} </div>
+									<div style="color:#404040;font-size:16px;margin-top:4px"> ${
+										// @ts-ignore
+										d.data.positionName
+									} </div>
+								</div> 
+								<div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
+									<div > Manages:  ${
+										// @ts-ignore
+										d.data._directSubordinates
+									} 👤</div>  
+									<div > Oversees: ${
+										// @ts-ignore
+										d.data._totalSubordinates
+									} 👤</div>    
+								</div>
+								</div>     
+						</div>
+						`
+					}
+				)
+				.render()
+		}
+
+	}, [ ref, isLoading ])
 
 	return (
 		<>
-			<div>
-				<a href="https://vite.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
+			{
+				isLoading
+					? <div>Carrregando...</div>
+					: <div
+						ref={ref}
+						style={{
+							width: 1200,
+							height: 800,
+							border: '2px dashed',
+							overflow: 'hidden'
+						}}
+					>
+
+					</div>
+			}
 		</>
 	)
 }
