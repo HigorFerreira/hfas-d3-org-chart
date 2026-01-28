@@ -42,6 +42,12 @@ function App() {
 				? <div>Carregando...</div>
 				: <OrgChartComponent
 					data={data}
+					nodeWidth={d => 250}
+					initialZoom={0.7}
+					nodeHeight={(d) => 175}
+					childrenMargin={(d) => 40}
+					compactMarginBetween={(d) => 15}
+					compactMarginPair={(d) => 80}
 					nodeContent={(d, i, arr, state) => {
 						return `
 							<div style="padding-top:30px;background-color:none;margin-left:1px;height:${

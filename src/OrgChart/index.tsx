@@ -64,12 +64,6 @@ export function OrgChartComponent<D=any>(
 				.container(d3Container.current)
 				// @ts-expect-error Annotation throuble
 				.data(data)
-				.nodeWidth((d) => 250)
-				.initialZoom(0.7)
-				.nodeHeight((d) => 175)
-				.childrenMargin((d) => 40)
-				.compactMarginBetween((d) => 15)
-				.compactMarginPair((d) => 80)
 				
 			props.nodeId && chartRef.current.nodeId(props.nodeId)
 			props.parentNodeId && chartRef.current.parentNodeId(props.parentNodeId)
