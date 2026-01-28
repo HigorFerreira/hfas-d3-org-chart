@@ -42,6 +42,40 @@ function App() {
 				? <div>Carregando...</div>
 				: <OrgChartComponent
 					data={data}
+					nodeContent={(d, i, arr, state) => {
+						return `
+							<div style="padding-top:30px;background-color:none;margin-left:1px;height:${
+									d.height
+									}px;border-radius:2px;overflow:visible">
+									<div style="height:${
+										d.height - 32
+									}px;padding-top:0px;background-color:white;border:1px solid lightgray;">
+
+										<img src=" ${
+											// @ts-ignore
+										d.data.imageUrl
+										// @ts-ignore
+										}" style="margin-top:-30px;margin-left:${d.width / 2 - 30}px;border-radius:100px;width:60px;height:60px;" />
+									
+									<div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${
+										// @ts-ignore
+										d.width - 2
+									}px;border-radius:1px"></div>
+
+									<div style="padding:20px; padding-top:35px;text-align:center">
+										<div style="color:#111672;font-size:16px;font-weight:bold"> ${
+											// @ts-ignore
+											d.data.name
+										} </div>
+										<div style="color:#404040;font-size:16px;margin-top:4px"> ${
+											// @ts-ignore
+											d.data.positionName
+										} </div>
+									</div>
+									</div>     
+							</div>
+						`
+					}}
 				/>
 		}
 	</div>
