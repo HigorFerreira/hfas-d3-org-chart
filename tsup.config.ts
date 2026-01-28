@@ -11,6 +11,10 @@ export default defineConfig({
 	splitting: false,
 	treeshake: true,
 
+	banner: {
+		js: '"use client";',
+	}
+
 	// IMPORTANT: bundle dependencies like d3-org-chart into the output
 	// tsup (esbuild) often externalizes deps automatically; force-bundle these:
 	// noExternal: ["d3-org-chart", "d3-hierarchy", "d3-selection", "d3-shape", "d3-zoom"],

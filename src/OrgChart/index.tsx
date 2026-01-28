@@ -1,3 +1,4 @@
+'use client'
 import { useLayoutEffect, useRef, type PropsWithChildren } from 'react';
 import { OrgChart } from 'd3-org-chart'
 import type { Props } from './types'
