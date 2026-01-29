@@ -1,7 +1,7 @@
 {
 	"name": "hfas-d3-org-chart",
 	"license": "MIT",
-	"version": "0.0.11",
+	"version": "0.0.112",
 	"type": "module",
 	"main": "./dist/index.cjs",
   	"module": "./dist/index.js",
@@ -12,10 +12,6 @@
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js",
 			"require": "./dist/index.cjs"
-		},
-		"./client": {
-			"types": "./dist/client.d.ts",
-			"import": "./dist/client.js"
 		}
 	},
 	"scripts": {

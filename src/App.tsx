@@ -40,7 +40,8 @@ function App() {
 		{
 			isLoading
 				? <div>Carregando...</div>
-				: <OrgChartComponent
+				: <OrgChartComponent<{ name: string; imageUrl: string; width: number; positionName: string }>
+					// @ts-expect-error Annotation
 					data={data}
 					nodeWidth={d => 250}
 					initialZoom={0.7}
@@ -58,23 +59,18 @@ function App() {
 									}px;padding-top:0px;background-color:white;border:1px solid lightgray;">
 
 										<img src=" ${
-											// @ts-ignore
 										d.data.imageUrl
-										// @ts-ignore
-										}" style="margin-top:-30px;margin-left:${d.width / 2 - 30}px;border-radius:100px;width:60px;height:60px;" />
+										}" style="margin-top:-30px;margin-left:${d.data.width / 2 - 30}px;border-radius:100px;width:60px;height:60px;" />
 									
 									<div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${
-										// @ts-ignore
-										d.width - 2
+										d.data.width - 2
 									}px;border-radius:1px"></div>
 
 									<div style="padding:20px; padding-top:35px;text-align:center">
 										<div style="color:#111672;font-size:16px;font-weight:bold"> ${
-											// @ts-ignore
 											d.data.name
 										} </div>
 										<div style="color:#404040;font-size:16px;margin-top:4px"> ${
-											// @ts-ignore
 											d.data.positionName
 										} </div>
 									</div>

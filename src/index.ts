@@ -1,1 +1,1 @@
-export { OrgChartComponent as default } from './OrgChart'
+export { OrgChartComponent as default, useChart } from './OrgChart'

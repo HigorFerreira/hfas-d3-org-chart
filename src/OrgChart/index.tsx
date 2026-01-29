@@ -1,7 +1,21 @@
 'use client'
-import { useLayoutEffect, useRef, type PropsWithChildren } from 'react';
+import React, { createContext, useContext, useLayoutEffect, useRef, type PropsWithChildren } from 'react';
 import { OrgChart } from 'd3-org-chart'
 import type { Props } from './types'
+
+type ContextType<D=any> = {
+	chart: React.RefObject<OrgChart<D>> | null
+}
+
+const Context = createContext<ContextType>({
+	chart: null
+})
+
+export function useChart<D=any>(){
+	const { chart } = useContext(Context)
+
+	return chart as unknown as ContextType<D>
+}
 
 export function OrgChartComponent<D=any>(
 	props: PropsWithChildren<Props<D>>
@@ -59,9 +73,8 @@ export function OrgChartComponent<D=any>(
 		}
 	}, [ props, d3Container.current ]);
 
-	return (
-		<div>
-			<div ref={d3Container} />
-		</div>
-	);
+	// @ts-expect-error Annotation
+	return <Context value={{ chart: chartRef.current }}>
+		<div ref={d3Container} />
+	</Context>
 }
