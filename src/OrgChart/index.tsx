@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useContext, useLayoutEffect, useRef, type PropsWithChildren } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { OrgChart } from 'd3-org-chart'
 import type { Props } from './types'
 
@@ -22,6 +22,8 @@ export function OrgChartComponent<D=any>(
 ){
 	const d3Container = useRef(null);
 	const chartRef = useRef(new OrgChart<D>());
+
+	const [ chart, setChart ] = useState<OrgChart<D> | null>(null)
 
 	useLayoutEffect(() => {
 
@@ -73,8 +75,16 @@ export function OrgChartComponent<D=any>(
 		}
 	}, [ props, d3Container.current ]);
 
+	useEffect(() => {
+		if(chartRef.current) {
+			setChart(chartRef.current)
+		}
+	}, [ chartRef ])
+
+	useEffect(() => console.log('CHART INTERNAL', { chart }), [ chart ])
+
 	// @ts-expect-error Annotation
-	return <Context value={{ chart: chartRef.current }}>
+	return <Context.Provider value={{ chart }}>
 		<div ref={d3Container} />
-	</Context>
+	</Context.Provider>
 }
