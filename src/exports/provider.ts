@@ -1,1 +1,1 @@
-export { Provider } from '../OrgChart/provider'
+export { Provider, Context } from '../OrgChart/provider'
