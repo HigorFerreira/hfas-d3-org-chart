@@ -12,6 +12,16 @@
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js",
 			"require": "./dist/index.cjs"
+		},
+		"./provider": {
+			"types": "./dist/provider.d.ts",
+			"import": "./dist/provider.js",
+			"require": "./dist/provider.cjs"
+		},
+		"./hooks": {
+			"types": "./dist/hooks.d.ts",
+			"import": "./dist/hooks.js",
+			"require": "./dist/hooks.cjs"
 		}
 	},
 	"scripts": {
