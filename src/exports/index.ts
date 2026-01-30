@@ -1,0 +1,1 @@
+export { OrgChartComponent as default } from '../OrgChart'
