@@ -1,90 +1,67 @@
-'use client'
-import React, { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type PropsWithChildren } from 'react';
-import { OrgChart } from 'd3-org-chart'
+import { useEffect, useLayoutEffect, useRef, type PropsWithChildren } from 'react';
 import type { Props } from './types'
-
-type ContextType<D=any> = {
-	chart: React.RefObject<OrgChart<D>> | null
-}
-
-const Context = createContext<ContextType>({
-	chart: null
-})
-
-export function useChart<D=any>(){
-	const { chart } = useContext(Context)
-
-	return chart as unknown as ContextType<D>
-}
+import { useChart } from './hooks'
 
 export function OrgChartComponent<D=any>(
 	props: PropsWithChildren<Props<D>>
 ){
+	const chart = useChart();
 	const d3Container = useRef(null);
-	const chartRef = useRef(new OrgChart<D>());
-
-	const [ chart, setChart ] = useState<OrgChart<D> | null>(null)
 
 	useLayoutEffect(() => {
 
 		const {
 			data,
-		} = props
+		} = props;
 
-		if(data && d3Container.current) {
-			chartRef.current
-				.container(d3Container.current)
-				// @ts-expect-error Annotation throuble
-				.data(data)
+		if(chart && data && d3Container.current) {
+
+			// @ts-expect-error Annotation throuble
+			chart.container(d3Container.current).data(data)
 				
-			props.nodeId && chartRef.current.nodeId(props.nodeId)
-			props.parentNodeId && chartRef.current.parentNodeId(props.parentNodeId)
-			props.defs && chartRef.current.defs(props.defs)
-			props.linkUpdate && chartRef.current.linkUpdate(props.linkUpdate)
-			props.nodeUpdate && chartRef.current.nodeUpdate(props.nodeUpdate)
-			props.nodeEnter && chartRef.current.nodeEnter(props.nodeEnter)
-			props.nodeExit && chartRef.current.nodeExit(props.nodeExit)
-			props.nodeWidth && chartRef.current.nodeWidth(props.nodeWidth)
-			props.nodeHeight && chartRef.current.nodeHeight(props.nodeHeight)
-			props.siblingsMargin && chartRef.current.siblingsMargin(props.siblingsMargin)
-			props.childrenMargin && chartRef.current.childrenMargin(props.childrenMargin)
-			props.neighbourMargin && chartRef.current.neighbourMargin(props.neighbourMargin)
-			props.compactMarginPair && chartRef.current.compactMarginPair(props.compactMarginPair)
-			props.compactMarginBetween && chartRef.current.compactMarginBetween(props.compactMarginBetween)
-			props.nodeButtonWidth && chartRef.current.nodeButtonWidth(props.nodeButtonWidth)
-			props.nodeButtonHeight && chartRef.current.nodeButtonHeight(props.nodeButtonHeight)
-			props.nodeButtonX && chartRef.current.nodeButtonX(props.nodeButtonX)
-			props.nodeButtonY && chartRef.current.nodeButtonY(props.nodeButtonY)
-			props.pagingStep && chartRef.current.pagingStep(props.pagingStep)
-			props.minPagingVisibleNodes && chartRef.current.minPagingVisibleNodes(props.minPagingVisibleNodes)
-			props.createZoom && chartRef.current.createZoom(props.createZoom)
-			props.onZoomStart && chartRef.current.onZoomStart(props.onZoomStart)
-			props.onZoom && chartRef.current.onZoom(props.onZoom)
-			props.onZoomEnd && chartRef.current.onZoomEnd(props.onZoomEnd)
-			props.onNodeClick && chartRef.current.onNodeClick(props.onNodeClick)
-			props.onExpandOrCollapse && chartRef.current.onExpandOrCollapse(props.onExpandOrCollapse)
-			props.nodeContent && chartRef.current.nodeContent(props.nodeContent)
-			props.buttonContent && chartRef.current.buttonContent(props.buttonContent)
-			props.pagingButton && chartRef.current.pagingButton(props.pagingButton)
+			props.nodeId && chart.nodeId(props.nodeId)
+			props.parentNodeId && chart.parentNodeId(props.parentNodeId)
+			props.defs && chart.defs(props.defs)
+			props.linkUpdate && chart.linkUpdate(props.linkUpdate)
+			props.nodeUpdate && chart.nodeUpdate(props.nodeUpdate)
+			props.nodeEnter && chart.nodeEnter(props.nodeEnter)
+			props.nodeExit && chart.nodeExit(props.nodeExit)
+			props.nodeWidth && chart.nodeWidth(props.nodeWidth)
+			props.nodeHeight && chart.nodeHeight(props.nodeHeight)
+			props.siblingsMargin && chart.siblingsMargin(props.siblingsMargin)
+			props.childrenMargin && chart.childrenMargin(props.childrenMargin)
+			props.neighbourMargin && chart.neighbourMargin(props.neighbourMargin)
+			props.compactMarginPair && chart.compactMarginPair(props.compactMarginPair)
+			props.compactMarginBetween && chart.compactMarginBetween(props.compactMarginBetween)
+			props.nodeButtonWidth && chart.nodeButtonWidth(props.nodeButtonWidth)
+			props.nodeButtonHeight && chart.nodeButtonHeight(props.nodeButtonHeight)
+			props.nodeButtonX && chart.nodeButtonX(props.nodeButtonX)
+			props.nodeButtonY && chart.nodeButtonY(props.nodeButtonY)
+			props.pagingStep && chart.pagingStep(props.pagingStep)
+			props.minPagingVisibleNodes && chart.minPagingVisibleNodes(props.minPagingVisibleNodes)
+			props.createZoom && chart.createZoom(props.createZoom)
+			props.onZoomStart && chart.onZoomStart(props.onZoomStart)
+			props.onZoom && chart.onZoom(props.onZoom)
+			props.onZoomEnd && chart.onZoomEnd(props.onZoomEnd)
+			props.onNodeClick && chart.onNodeClick(props.onNodeClick)
+			props.onExpandOrCollapse && chart.onExpandOrCollapse(props.onExpandOrCollapse)
+			props.nodeContent && chart.nodeContent(props.nodeContent)
+			props.buttonContent && chart.buttonContent(props.buttonContent)
+			props.pagingButton && chart.pagingButton(props.pagingButton)
 
 
-			typeof props.initialZoom !== undefined && chartRef.current.initialZoom(props.initialZoom as number)
+			typeof props.initialZoom !== undefined && chart.initialZoom(props.initialZoom as number)
 
 
-			chartRef.current.render();
+			chart.render();
 		}
-	}, [ props, d3Container.current ]);
 
-	useEffect(() => {
-		if(chartRef.current) {
-			setChart(chartRef.current)
-		}
-	}, [ chartRef ])
+	}, [ props, chart, d3Container.current ]);
 
-	useEffect(() => console.log('CHART INTERNAL', { chart }), [ chart ])
+	useEffect(() => console.log({ chart }), [ chart ])
 
-	// @ts-expect-error Annotation
-	return <Context.Provider value={{ chart }}>
+
+	return <div>
 		<div ref={d3Container} />
-	</Context.Provider>
+	</div>
 }

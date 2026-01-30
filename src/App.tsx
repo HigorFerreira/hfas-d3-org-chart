@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { tree, walkMap } from './data'
 
-import { OrgChartComponent, useChart } from './OrgChart'
+import { OrgChartComponent } from './OrgChart'
 
 function useTjData(){
 	const data = useMemo(() => {
@@ -30,10 +30,6 @@ function useTjData(){
 function App() {
 	const ref = useRef<HTMLDivElement>(null)
 	const [ data, isLoading ] = useTjData()
-
-	const chart = useChart()
-
-	useEffect(() => console.log('CHART EXTERNAL', { chart }), [ chart ])
 
 	return <div style={{
 		width: 'calc(100vw - 120px)',

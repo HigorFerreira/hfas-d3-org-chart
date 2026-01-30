@@ -1,6 +1,10 @@
 import { OrgChart } from 'd3-org-chart';
 import type { StatePublic } from '../types/orgchart'
 
+export type ContextType<D=any> = {
+    chart: OrgChart<D> | null
+}
+
 export type Props<D=any> = {
     data?: D
     nodeId?: StatePublic<D>['nodeId']
